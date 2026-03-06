@@ -64,7 +64,7 @@
       if (!url) return '';
       const match = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/) || url.match(/id=([a-zA-Z0-9_-]+)/) || url.match(/\/d\/([a-zA-Z0-9_-]+)/);
       if (match && match[1]) {
-        return `https://lh3.googleusercontent.com/d/$${match[1]}`;
+        return `https://lh3.googleusercontent.com/d/${match[1]}`;
       }
       return url;
     };
@@ -247,7 +247,6 @@
                 <IconCalendar size={11} style={{ color: COLORS.pinkDeep }} />
                 {new Date(task.deadline).toLocaleDateString('th-TH', { day: '2-digit', month: '2-digit', year: '2-digit' })}
               </div>
-              {/* ส่วนแสดงเวลาที่เพิ่มเข้ามา */}
               {(task.startTime || task.endTime) && (
                 <div className="flex items-center gap-1 text-[8px] font-black text-gray-400 bg-white/80 px-2 py-0.5 rounded-md border border-gray-100 shadow-sm">
                   <IconClock size={9} /> {task.startTime || '?'} - {task.endTime || '?'}
@@ -381,7 +380,7 @@
       // ==========================================
       // 🌟 ตั้งค่าเชื่อมต่อ API (GitHub -> Google Sheets)
       // ==========================================
-      const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwcBNNK0T7dvB_eNRbB7Ho-uGHJQ9PcVtDE3QOVapgyZHt91OvOHpTgXpA61YrfizPN3A/exec";
+      const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzxTtJHNogn6mldlDk4F716JbSzBff6AXgvJci0F-HuU-JqSxx92OB2uSukBDLzpel11A/exec";
 
       const fetchAPI = async (payload) => {
         try {
@@ -502,8 +501,6 @@
         e.preventDefault();
         setIsSaving(true);
         const formData = new FormData(e.target);
-        
-        // 📥 เพิ่มการอ่านค่า startTime และ endTime จากฟอร์มตรงนี้
         const taskData = {
           id: editingTask ? editingTask.id : null,
           title: '', 
@@ -513,8 +510,8 @@
           priority: formData.get('priority') ? 'urgent' : 'normal', 
           deadline: formData.get('deadline'),
           details: formData.get('details'),
-          startTime: formData.get('startTime'), // เพิ่มแล้ว
-          endTime: formData.get('endTime'),     // เพิ่มแล้ว
+          startTime: formData.get('startTime'), 
+          endTime: formData.get('endTime'),     
         };
 
         fetchAPI({ action: 'saveOrUpdateTask', task: taskData })
@@ -740,19 +737,19 @@
                       <input name="deadline" type="date" required defaultValue={editingTask?.deadline || nextQueueDate} className="w-full ml-2 p-2.5 rounded-xl bg-white border border-[#FCF6DE] outline-none text-[10px] font-black text-[#f6a3bd] shadow-sm focus:border-[#fbd3de] focus:ring-2 focus:ring-[#fbd3de]/50 transition-all cursor-pointer active:scale-95 hover:border-[#fbd3de]" />
                     </div>
 
-                    {/* ช่องกรอกเวลา เริ่ม-สิ้นสุด */}
+                    {/* ช่องกรอกเวลา เริ่ม-สิ้นสุด (ปรับให้เล็กลง ไม่ล้นกรอบมือถือ) */}
                     <div className="flex gap-2 mt-1 w-full">
-                      <div className="flex-1 flex flex-col justify-center bg-[#fbd3de]/30 p-1.5 rounded-2xl border border-[#FCF6DE]/50 transition-all hover:bg-[#fbd3de]/80 hover:shadow-sm">
-                        <div className="flex items-center gap-1 mb-1 text-[10px] uppercase font-black" style={{ color: COLORS.pinkDeep }}>
-                          <IconClock size={12} /><span>เริ่ม</span>
+                      <div className="flex-1 min-w-0 flex flex-col justify-center bg-[#fbd3de]/30 p-1 rounded-xl border border-[#FCF6DE]/50 transition-all hover:bg-[#fbd3de]/80 hover:shadow-sm">
+                        <div className="flex items-center justify-center gap-1 mb-0.5 text-[9px] uppercase font-black" style={{ color: COLORS.pinkDeep }}>
+                          <IconClock size={10} /><span>เริ่ม</span>
                         </div>
-                        <input name="startTime" type="time" defaultValue={editingTask?.startTime || ''} className="w-full min-w-0 p-2 rounded-xl bg-white border border-[#FCF6DE] outline-none text-[11px] font-black text-[#f6a3bd] shadow-sm focus:border-[#fbd3de] transition-all cursor-pointer text-center" />
+                        <input name="startTime" type="time" defaultValue={editingTask?.startTime || ''} className="w-full min-w-0 py-1 px-0 rounded-lg bg-white border border-[#FCF6DE] outline-none text-[10px] tracking-tighter font-black text-[#f6a3bd] shadow-sm focus:border-[#fbd3de] transition-all cursor-pointer text-center" />
                       </div>
-                      <div className="flex-1 flex flex-col justify-center bg-[#fbd3de]/30 p-1.5 rounded-2xl border border-[#FCF6DE]/50 transition-all hover:bg-[#fbd3de]/80 hover:shadow-sm">
-                        <div className="flex items-center gap-1 mb-1 text-[10px] uppercase font-black" style={{ color: COLORS.pinkDeep }}>
-                          <IconClock size={12} /><span>สิ้นสุด</span>
+                      <div className="flex-1 min-w-0 flex flex-col justify-center bg-[#fbd3de]/30 p-1 rounded-xl border border-[#FCF6DE]/50 transition-all hover:bg-[#fbd3de]/80 hover:shadow-sm">
+                        <div className="flex items-center justify-center gap-1 mb-0.5 text-[9px] uppercase font-black" style={{ color: COLORS.pinkDeep }}>
+                          <IconClock size={10} /><span>สิ้นสุด</span>
                         </div>
-                        <input name="endTime" type="time" defaultValue={editingTask?.endTime || ''} className="w-full min-w-0 p-2 rounded-xl bg-white border border-[#FCF6DE] outline-none text-[11px] font-black text-[#f6a3bd] shadow-sm focus:border-[#fbd3de] transition-all cursor-pointer text-center" />
+                        <input name="endTime" type="time" defaultValue={editingTask?.endTime || ''} className="w-full min-w-0 py-1 px-0 rounded-lg bg-white border border-[#FCF6DE] outline-none text-[10px] tracking-tighter font-black text-[#f6a3bd] shadow-sm focus:border-[#fbd3de] transition-all cursor-pointer text-center" />
                       </div>
                     </div>
 
@@ -887,4 +884,3 @@
   </script>
 </body>
 </html>
-
